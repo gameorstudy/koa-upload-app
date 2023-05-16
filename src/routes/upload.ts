@@ -25,27 +25,24 @@ const limits = {
   files: 1
 }
 
-router.post("/upload", (ctx, next) => {
+router.post("/upload", async (ctx, next) => {
   const upload = multer({
     storage,
     limits
   }).single('file')
 
-  upload(ctx, next).then(res => {
+  try {
+    await upload(ctx, next)
     ctx.body = {
       status: 200,
       message: 'Success'
     }
-  }).catch(err => {
-    console.log(err)
+  } catch (err) {
     ctx.body = {
-      status: -1,
-      message: 'Field'
+      status: -100,
+      message: '文件上传失败'
     }
-  })
-
-
-
+  }
 });
 
 export default router;
